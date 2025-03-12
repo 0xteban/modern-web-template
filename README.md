@@ -1,54 +1,91 @@
 # Modern Web Template
 
-A modern Next.js template optimized for performance and developer experience, built with TypeScript and modern UI frameworks.
+A modern web application template built with Next.js, TypeScript, Tailwind CSS, and shadcn/ui components.
 
 ## Features
 
-- ⚡ Next.js 14 with App Router and RSC
-- 🔷 TypeScript
-- 🎨 Tailwind CSS + Shadcn UI
-- 📊 TanStack Query
-- 🏪 Zustand
-- ✅ Zod
-- 🧪 Jest + RTL
+- **Next.js 14**: App Router, Server Components, and more
+- **TypeScript**: Type-safe code
+- **Tailwind CSS**: Utility-first CSS framework
+- **shadcn/ui**: High-quality UI components
+- **Supabase Integration**: Database and authentication
+- **OpenAI Integration**: AI capabilities
 
-## Quick Start
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18.x or higher
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
-git clone https://github.com/0xteban/modern-web-template.git
+git clone https://github.com/yourusername/modern-web-template.git
 cd modern-web-template
+```
+
+2. Install dependencies:
+
+```bash
 npm install
-cp .env.example .env.local
+```
+
+3. Set up environment variables:
+
+Create a `.env` file in the root directory with the following variables:
+
+```
+# Supabase credentials
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# OpenAI API key
+NEXT_PUBLIC_OPENAI_API_KEY=your_openai_api_key
+```
+
+4. Start the development server:
+
+```bash
 npm run dev
 ```
 
-## Structure
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Project Structure
 
 ```
-src/
-├── app/          # App router pages
-├── components/   # React components
-├── lib/         # Utils and configs
-├── hooks/       # Custom hooks
-└── types/       # TypeScript types
+/
+├── public/             # Static assets
+├── src/
+│   ├── app/            # Next.js app router
+│   ├── components/     # React components
+│   │   └── ui/         # shadcn/ui components
+│   ├── lib/            # Utility functions and libraries
+│   ├── hooks/          # Custom React hooks
+│   └── types/          # TypeScript type definitions
+├── .env.example        # Example environment variables
+├── next.config.mjs     # Next.js configuration
+├── tailwind.config.js  # Tailwind CSS configuration
+└── tsconfig.json       # TypeScript configuration
 ```
 
-## Scripts
+## Customization
 
-- `npm run dev` - Development
-- `npm run build` - Production build
-- `npm run start` - Production server
-- `npm run test` - Run tests
-- `npm run lint` - ESLint
-- `npm run typecheck` - TypeScript check
+### Adding New Components
 
-## Best Practices
+This project uses shadcn/ui components. You can add more components as needed.
 
-- Server Components by default
-- Type-safe API routes
-- Component-driven UI
-- Mobile-first responsive design
-- Accessibility-first
-- Performance optimized
+### Styling
 
-See [documentation](https://github.com/0xteban/modern-web-template/wiki) for detailed setup and contribution guidelines.
+This project uses Tailwind CSS for styling. You can customize the theme in `tailwind.config.js`.
+
+## Deployment
+
+This project can be deployed to Vercel, Netlify, or any other platform that supports Next.js.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
