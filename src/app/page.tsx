@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { openai } from '@/lib/openai';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -69,6 +70,15 @@ export default function Home() {
                   <p>{message}</p>
                 </div>
               )}
+            </div>
+
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Image Generator</h2>
+              <Button asChild>
+                <Link href="/image-generator">
+                  Try Image Generator
+                </Link>
+              </Button>
             </div>
           </CardContent>
         </Card>

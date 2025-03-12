@@ -18,6 +18,9 @@ export function Header() {
             <Link href="/" className="text-sm font-medium hover:underline">
               Home
             </Link>
+            <Link href="/image-generator" className="text-sm font-medium hover:underline">
+              Image Generator
+            </Link>
             <Link href="/about" className="text-sm font-medium hover:underline">
               About
             </Link>
