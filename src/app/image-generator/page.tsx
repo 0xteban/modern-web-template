@@ -60,7 +60,17 @@ export default function ImageGeneratorPage() {
       const result = await generateImage(params);
       
       if (result.images && result.images.length > 0) {
+        // The API route now ensures that images are properly formatted with data URL prefixes
+        // So we can directly use the image data from the response
         setGeneratedImage(result.images[0]);
+        
+        // Log timing information for debugging
+        if (result.timing) {
+          console.log('Image generation timing:', {
+            inferenceDuration: result.timing.inferenceDuration,
+            total: result.timing.total
+          });
+        }
       } else {
         setError('No image was generated');
       }

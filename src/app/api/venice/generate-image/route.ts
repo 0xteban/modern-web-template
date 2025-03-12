@@ -49,6 +49,23 @@ export async function POST(request: NextRequest) {
 
     const data: VeniceImageResponse = await response.json();
     
+    // Ensure the image data is properly formatted
+    if (data.images && data.images.length > 0) {
+      // Venice API returns base64 encoded image data
+      // We need to ensure it has the proper data URL prefix based on the requested format
+      data.images = data.images.map(image => {
+        // If it's already a properly formatted URL or data URL, return as is
+        if (image.startsWith('http') || image.startsWith('data:image/')) {
+          return image;
+        }
+        
+        // If it's a base64 string without the data URL prefix, add it
+        // Use the format specified in the request, defaulting to webp
+        const format = body.format || 'webp';
+        return `data:image/${format};base64,${image}`;
+      });
+    }
+    
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error generating image:', error);

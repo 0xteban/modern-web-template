@@ -21,6 +21,9 @@ export function Header() {
             <Link href="/image-generator" className="text-sm font-medium hover:underline">
               Image Generator
             </Link>
+            <Link href="/test-data" className="text-sm font-medium hover:underline">
+              Test Data
+            </Link>
             <Link href="/about" className="text-sm font-medium hover:underline">
               About
             </Link>
