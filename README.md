@@ -1,61 +1,54 @@
 # Modern Web Template
 
-A modern web application template built with React, TypeScript, Tailwind CSS, Supabase, and OpenAI integration.
+A modern Next.js template optimized for performance and developer experience, built with TypeScript and modern UI frameworks.
 
 ## Features
 
-- ⚛️ React with TypeScript
-- 🎨 Tailwind CSS with Typography and Forms plugins
-- 🔐 Supabase integration ready
-- 🤖 OpenAI API integration ready
-- ⚡ Vite for fast development
-- 📱 Responsive design utilities
+- ⚡ Next.js 14 with App Router and RSC
+- 🔷 TypeScript
+- 🎨 Tailwind CSS + Shadcn UI
+- 📊 TanStack Query
+- 🏪 Zustand
+- ✅ Zod
+- 🧪 Jest + RTL
 
-## Getting Started
+## Quick Start
 
-1. Clone this template
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Copy `.env.example` to `.env` and fill in your API keys:
-   ```bash
-   cp .env.example .env
-   ```
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
+```bash
+git clone https://github.com/0xteban/modern-web-template.git
+cd modern-web-template
+npm install
+cp .env.example .env.local
+npm run dev
+```
 
-## Project Structure
+## Structure
 
 ```
 src/
-├── lib/
-│   ├── supabase.ts    # Supabase client configuration
-│   └── openai.ts      # OpenAI client configuration
-├── App.tsx            # Main application component
-└── index.css         # Global styles and Tailwind imports
+├── app/          # App router pages
+├── components/   # React components
+├── lib/         # Utils and configs
+├── hooks/       # Custom hooks
+└── types/       # TypeScript types
 ```
 
-## Available Scripts
+## Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run typecheck` - Run TypeScript type checking
+- `npm run dev` - Development
+- `npm run build` - Production build
+- `npm run start` - Production server
+- `npm run test` - Run tests
+- `npm run lint` - ESLint
+- `npm run typecheck` - TypeScript check
 
-## Styling
+## Best Practices
 
-The template includes pre-configured Tailwind CSS with:
-- Typography plugin for rich text styling
-- Forms plugin for form element styling
-- Custom component classes in `index.css`
+- Server Components by default
+- Type-safe API routes
+- Component-driven UI
+- Mobile-first responsive design
+- Accessibility-first
+- Performance optimized
 
-## Environment Variables
-
-Required environment variables:
-- `VITE_SUPABASE_URL`: Your Supabase project URL
-- `VITE_SUPABASE_ANON_KEY`: Your Supabase anonymous key
-- `VITE_OPENAI_API_KEY`: Your OpenAI API key
+See [documentation](https://github.com/0xteban/modern-web-template/wiki) for detailed setup and contribution guidelines.
