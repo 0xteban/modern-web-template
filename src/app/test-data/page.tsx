@@ -237,7 +237,7 @@ export default function TestDataPage() {
                   <Input
                     id="description"
                     name="description"
-                    value={formData.description}
+                    value={formData.description || ''}
                     onChange={handleInputChange}
                     placeholder="Enter description (optional)"
                   />
