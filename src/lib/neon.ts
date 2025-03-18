@@ -7,10 +7,17 @@ neonConfig.useSecureWebSocket = true;
 neonConfig.fetchConnectionCache = true;
 
 // Get connection string from environment variable
-const connectionString = process.env.NEON_DATABASE_URL;
+// Try Neon URL first, then fall back to Supabase URL if available
+let connectionString = process.env.NEON_DATABASE_URL;
+
+// If no Neon URL is provided, try to construct one from Supabase URL
+if (!connectionString && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL.replace('https://', '');
+  connectionString = `postgresql://postgres:postgres@${supabaseHost}:5432/postgres`;
+}
 
 if (!connectionString) {
-  throw new Error('Missing Neon database connection string');
+  throw new Error('Missing database connection string. Please set NEON_DATABASE_URL in your .env.local file');
 }
 
 // Create SQL executor for serverless environments
