@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,8 +8,22 @@ import { ChatMessage, MessageRole } from '@/components/chat/types';
 import { ChatMessageList } from '@/components/chat/chat-message-list';
 import { FileUpload } from '@/components/chat/file-upload';
 import { toast } from '@/components/ui/use-toast';
+import { useAccount } from '@/contexts/account-context';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
+  return (
+    <div className="container mx-auto max-w-4xl py-8 px-4">
+      <h1 className="text-2xl font-bold mb-6">Chat with OpenAI Vision API</h1>
+      <Suspense fallback={<ChatSkeleton />}>
+        <ChatContent />
+      </Suspense>
+    </div>
+  );
+}
+
+function ChatContent() {
+  const { currentAccount, isLoading: isAccountLoading } = useAccount();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -22,10 +36,35 @@ export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
+  // Load conversation history when account changes
+  useEffect(() => {
+    if (currentAccount) {
+      // Reset messages when account changes
+      setMessages([
+        {
+          id: '1',
+          role: 'system',
+          content: `You are a helpful assistant for the account "${currentAccount.name}".`,
+        },
+      ]);
+      
+      // TODO: Load conversation history from the database for the current account
+      // This would be implemented in a future feature
+    }
+  }, [currentAccount]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!input.trim() && !selectedFile) return;
+    if (!currentAccount) {
+      toast({
+        title: 'No Account Selected',
+        description: 'Please select an account to continue.',
+        variant: 'destructive',
+      });
+      return;
+    }
     
     setIsLoading(true);
     let imageUrl = '';
@@ -85,6 +124,7 @@ export default function Home() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Account-ID': currentAccount.id,
         },
         body: JSON.stringify({
           messages: [...messages, userMessage].map(({ role, content, imageUrl, imageBase64 }) => ({
@@ -93,6 +133,7 @@ export default function Home() {
             ...(imageUrl && { imageUrl }),
             ...(imageBase64 && { imageBase64 }),
           })),
+          accountId: currentAccount.id,
         }),
       });
       
@@ -112,6 +153,10 @@ export default function Home() {
           content: data.content,
         },
       ]);
+      
+      // TODO: Save conversation to the database for the current account
+      // This would be implemented in a future feature
+      
     } catch (error) {
       console.error('Error:', error);
       toast({
@@ -142,10 +187,23 @@ export default function Home() {
     setSelectedFile(null);
   };
   
+  if (isAccountLoading) {
+    return <ChatSkeleton />;
+  }
+  
+  if (!currentAccount) {
+    return (
+      <div className="p-8 text-center">
+        <h2 className="text-xl font-semibold mb-4">No Account Selected</h2>
+        <p className="text-gray-600">
+          Please select an account from the dropdown in the header to start chatting.
+        </p>
+      </div>
+    );
+  }
+  
   return (
-    <div className="container mx-auto max-w-4xl py-8 px-4">
-      <h1 className="text-2xl font-bold mb-6">Chat with OpenAI Vision API</h1>
-      
+    <>
       <Card className="p-4 mb-4 h-[60vh] overflow-y-auto">
         <ChatMessageList messages={messages} />
       </Card>
@@ -168,6 +226,19 @@ export default function Home() {
           {isLoading ? 'Sending...' : 'Send'}
         </Button>
       </form>
+    </>
+  );
+}
+
+function ChatSkeleton() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Skeleton className="h-[60vh] w-full rounded-lg" />
+      <div className="flex gap-2">
+        <Skeleton className="h-10 w-10" />
+        <Skeleton className="h-10 flex-1" />
+        <Skeleton className="h-10 w-20" />
+      </div>
     </div>
   );
 }

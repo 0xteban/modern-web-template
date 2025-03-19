@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:rls": "node scripts/test-rls.js",
+    "setup:rls": "curl -s http://localhost:3000/api/setup-rls",
+    "check:db": "node scripts/check-db-connection.js"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
@@ -19,6 +22,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "dotenv": "^16.4.7",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.363.0",
     "next": "^14.1.0",
     "openai": "^4.87.3",
@@ -33,6 +37,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",

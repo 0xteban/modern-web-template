@@ -1,13 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { useUser, UserButton as StackUserButton } from '@stackframe/stack';
+import { UserButton as StackUserButton } from '@stackframe/stack';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useCurrentUser } from '@/hooks/use-current-user';
 
 export function UserButton() {
-  const user = useUser({ or: 'return-null' });
+  const { user, isLoading } = useCurrentUser();
   const [isOpen, setIsOpen] = useState(false);
+  
+  if (isLoading) {
+    return (
+      <Button variant="outline" size="sm" disabled>
+        Loading...
+      </Button>
+    );
+  }
   
   if (!user) {
     return (
