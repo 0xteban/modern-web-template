@@ -36,32 +36,7 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      // First, check if Stack Auth is properly configured
-      const authResponse = await fetch('/api/test-env');
-      const authData = await authResponse.json();
-      
-      if (!authResponse.ok) {
-        console.error('Environment check failed:', authData);
-        throw new Error('Failed to check environment configuration');
-      }
-      
-      console.log('Environment check:', authData);
-      
-      // Check if all required Stack Auth environment variables are set
-      const { envVars } = authData;
-      if (
-        envVars.NEXT_PUBLIC_STACK_PROJECT_ID === 'Not set' ||
-        envVars.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY === 'Not set' ||
-        envVars.STACK_SECRET_SERVER_KEY === 'Not set'
-      ) {
-        throw new Error('Stack Auth is not properly configured. Check your environment variables.');
-      }
-      
-      if (envVars.NEON_DATABASE_URL === 'Not set') {
-        throw new Error('Database connection is not properly configured. Check your environment variables.');
-      }
-      
-      // Now fetch the accounts
+      // Directly fetch the accounts without doing environment checks
       const response = await fetch(`/api/accounts?userId=${user.id}`, {
         headers: {
           'Cache-Control': 'no-cache',
@@ -75,7 +50,6 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
       }
       
       const data = await response.json();
-      console.log('Accounts API response:', data);
       
       if (data.success && data.data) {
         setAccounts(data.data);

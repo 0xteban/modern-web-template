@@ -38,20 +38,57 @@ function ChatContent() {
 
   // Load conversation history when account changes
   useEffect(() => {
-    if (currentAccount) {
-      // Reset messages when account changes
-      setMessages([
-        {
-          id: '1',
-          role: 'system',
-          content: `You are a helpful assistant for the account "${currentAccount.name}".`,
-        },
-      ]);
-      
-      // TODO: Load conversation history from the database for the current account
-      // This would be implemented in a future feature
-    }
-  }, [currentAccount]);
+    if (!currentAccount || isAccountLoading) return;
+    
+    // Reset messages when account changes
+    setMessages([
+      {
+        id: '1',
+        role: 'system',
+        content: `You are a helpful assistant for the account "${currentAccount.name}".`,
+      },
+    ]);
+    
+    // Load conversation history from the database for the current account
+    const loadConversationHistory = async () => {
+      try {
+        const response = await fetch(`/api/conversations/latest?accountId=${currentAccount.id}`);
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch conversation history');
+        }
+        
+        const data = await response.json();
+        
+        if (data.success && data.data?.messages?.length > 0) {
+          // Add the conversation messages to the chat
+          setMessages(prevMessages => {
+            // Keep the system message and add the conversation messages
+            const systemMessage = prevMessages.find(msg => msg.role === 'system');
+            return [
+              ...(systemMessage ? [systemMessage] : []),
+              ...data.data.messages.map((msg: any) => ({
+                id: msg.id,
+                role: msg.is_from_ai ? 'assistant' : 'user',
+                content: msg.content,
+              })),
+            ];
+          });
+        }
+      } catch (error) {
+        console.error('Error loading conversation history:', error);
+        toast({
+          title: 'Error',
+          description: `Failed to load conversation history: ${(error as Error).message}`,
+          variant: 'destructive',
+        });
+      }
+    };
+    
+    loadConversationHistory();
+    // Only load when account changes or when explicitly requested
+  }, [currentAccount?.id, isAccountLoading]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -110,7 +147,7 @@ function ChatContent() {
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       role: 'user',
-      content: input.trim() || 'Analyze this image',
+      content: input.trim() || 'Add this expense',
       ...(imageUrl && { imageUrl }),
       ...(imageBase64 && { imageBase64 }),
     };
