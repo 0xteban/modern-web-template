@@ -1,22 +1,7 @@
 Development Plan
-Phase 1: Foundation Setup (1-2 weeks)
-Authentication Integration
-Leverage existing authentication with Stackframe (@stackframe/stack)
-Integrate authentication with the database users table
-Add session management for account switching
-Core UI Components
-Extend existing shadcn/ui components for budget-specific UI elements
-Create reusable components for expense entry, filtering, and visualization
-Implement layout components for the dashboard and chat interfaces
+
 Phase 2: LLM Integration (2 weeks)
 Multimodal Chat Interface
-Build on existing OpenAI integration to support GPT-4 Vision for receipt processing
-Implement context-aware chat system that remembers account context
-Create conversation persistence linked to accounts
-Receipt Processing
-Build image uploading and processing pipeline
-Create prompt engineering for extracting expense details from receipts
-Implement error handling and correction workflows
 Database Interaction Layer for LLM
 Create secure API endpoints that the LLM can call to:
 Retrieve expense data for queries and reports
@@ -25,7 +10,7 @@ Update existing expenses based on user corrections
 Add/modify tags and categories through natural language
 Phase 3: Account and Expense Management (2 weeks)
 Account Management
-Create personal account for each user automatically
+Add currency, convert to default currency
 Implement account creation, editing, and deletion
 Build account switching interface in the header
 Expense Tracking Core

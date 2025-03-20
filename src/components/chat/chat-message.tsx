@@ -3,9 +3,19 @@
 import { cn } from '@/lib/utils';
 import { ChatMessage as ChatMessageType } from './types';
 import Image from 'next/image';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface ChatMessageProps {
   message: ChatMessageType;
+}
+
+// Define a custom type for code props that includes the inline property
+interface CodeComponentProps {
+  node?: any;
+  inline?: boolean;
+  className?: string;
+  children?: React.ReactNode;
 }
 
 export function ChatMessage({ message }: ChatMessageProps) {
@@ -17,6 +27,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
         'flex w-full items-start gap-2 py-2',
         isUser ? 'justify-end' : 'justify-start'
       )}
+      data-component-name="ChatMessage"
     >
       <div
         className={cn(
@@ -36,7 +47,36 @@ export function ChatMessage({ message }: ChatMessageProps) {
             />
           </div>
         )}
-        {message.content}
+        <div className="prose prose-sm dark:prose-invert max-w-none">
+          <ReactMarkdown 
+            remarkPlugins={[remarkGfm]}
+            components={{
+              // Override default element styling
+              p: ({ children }) => <p className="mb-2 whitespace-pre-wrap">{children}</p>,
+              ul: ({ children }) => <ul className="mb-2 list-disc pl-4">{children}</ul>,
+              ol: ({ children }) => <ol className="mb-2 list-decimal pl-4">{children}</ol>,
+              li: ({ children }) => <li className="mb-1">{children}</li>,
+              h1: ({ children }) => <h1 className="text-xl font-bold mb-2">{children}</h1>,
+              h2: ({ children }) => <h2 className="text-lg font-bold mb-2">{children}</h2>,
+              h3: ({ children }) => <h3 className="text-md font-bold mb-2">{children}</h3>,
+              code: ({ node, inline, className, children, ...props }: CodeComponentProps) => {
+                const match = /language-(\w+)/.exec(className || '');
+                if (inline) {
+                  return <code className="bg-muted-foreground/20 rounded px-1 py-0.5">{children}</code>;
+                }
+                return (
+                  <pre className="bg-muted-foreground/20 rounded p-2 overflow-x-auto mb-2">
+                    <code className={match ? `language-${match[1]}` : ''} {...props}>
+                      {children}
+                    </code>
+                  </pre>
+                );
+              },
+            }}
+          >
+            {message.content}
+          </ReactMarkdown>
+        </div>
       </div>
     </div>
   );
